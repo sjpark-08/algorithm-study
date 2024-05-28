@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <memory.h>
 #define BUFSIZE 1 << 20
-char readbuf[BUFSIZE];
-int rp = BUFSIZE;
+char readbuf[BUFSIZE], writebuf[BUFSIZE];
+int rp = BUFSIZE, wp = 0;
 char ReadChar(){
     if(rp == BUFSIZE){
         fread(readbuf, 1, BUFSIZE, stdin);
@@ -21,6 +21,25 @@ int ReadInt(){
         c = ReadChar();
     }
     return ret;
+}
+void WriteInt(int n){
+    int tmp = n, cnt = 0;
+    while(tmp){
+        tmp /= 10;
+        cnt++;
+    }
+    if(wp + cnt >= BUFSIZE){
+        fwrite(writebuf, 1, wp, stdout);
+        wp = 0;
+    }
+    int len = cnt;
+    writebuf[wp + cnt] = '\n';
+    do{
+        cnt--;
+        writebuf[wp + cnt] = (char)(n % 10 + 48);
+        n /= 10;
+    }while(n);
+    wp += len + 1;
 }
 
 typedef struct _Node{
@@ -108,8 +127,10 @@ int main(void){
     for(int i = 1; i <= N; i++){
         if(d[i] == K){
             fail = false;
-            printf("%d\n", i);
+            //printf("%d\n", i);
+            WriteInt(i);
         }
     }
     if(fail) printf("-1\n");
+    fwrite(writebuf, 1, wp, stdout);
 }
