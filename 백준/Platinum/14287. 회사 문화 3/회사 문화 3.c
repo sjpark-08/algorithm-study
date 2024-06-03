@@ -45,19 +45,16 @@ void dfs(int x){
     }
     e[x] = cnt;
 }
-int query(int start, int end, int left, int right, int node){
-    if(right < start || end < left) return 0;
-    if(left <= start && end <= right) return tree[node];
-    int mid = start + end >> 1;
-    return query(start, mid, left, right, node << 1) + query(mid + 1, end, left, right, node << 1|1);
+int query(int l, int r){
+    int ret = 0;
+    for(l += n, r += n; l < r; l >>= 1, r >>= 1){
+        if(l & 1) ret += tree[l++];
+        if(r & 1) ret += tree[--r];
+    }
+    return ret;
 }
-void update(int start, int end, int index, int dif, int node){
-    if(index < start || end < index) return;
-    tree[node] += dif;
-    if(start == end) return;
-    int mid = start + end >> 1;
-    update(start, mid, index, dif, node << 1);
-    update(mid + 1, end, index, dif, node << 1|1);
+void update(int i, int dif){
+    for(tree[i += n] += dif; i > 1; i >>= 1) tree[i >> 1] = tree[i] + tree[i ^ 1]; 
 }
 
 int main(void){
@@ -73,16 +70,14 @@ int main(void){
         Insert(adj[up], i);
     }
     dfs(1);
-    //for(int i = 1; i <= n; i++) printf("%d ", s[i]); printf("\n");
-    //for(int i = 1; i <= n; i++) printf("%d ", e[i]); printf("\n");
     while(m--){
         q = ReadInt();
         if(q & 1){
             a = ReadInt(), b = ReadInt();
-            update(1, n, s[a], b, 1);
+            update(s[a], b);
         }else{
             a = ReadInt();
-            printf("%d\n", query(1, n, s[a], e[a], 1));
+            printf("%d\n", query(s[a], e[a] + 1));
         }
     }
 }
