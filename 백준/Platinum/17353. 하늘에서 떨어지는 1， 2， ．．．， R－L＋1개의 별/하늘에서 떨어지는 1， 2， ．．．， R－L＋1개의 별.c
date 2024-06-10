@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define BUFSIZE 1 << 20
+#define BUFSIZE 1 << 19
 char readbuf[BUFSIZE];
 int rp = BUFSIZE;
 char ReadChar(){
