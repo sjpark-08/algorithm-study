@@ -3,7 +3,6 @@
 #define Max(x, y) ((x) > (y) ? (x) : (y))
 
 char duck[6] = "quack";
-char stack[501][5];
 int top[501];
 char str[2501];
 
