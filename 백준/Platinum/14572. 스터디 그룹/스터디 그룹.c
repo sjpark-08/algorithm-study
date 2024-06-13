@@ -1,6 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define Max(x, y) ((x) > (y) ? (x) : (y))
+#define BUFSIZE 1 << 18
+char readbuf[BUFSIZE];
+int rp = BUFSIZE;
+char ReadChar(){
+    if(rp == BUFSIZE){
+        fread(readbuf, 1, BUFSIZE, stdin);
+        rp = 0;
+    }
+    return readbuf[rp++];
+}
+int ReadInt(){
+    char c;
+    int ret = 0;
+    while(c < '0') c = ReadChar();
+    while(c >= '0'){
+        ret = ret * 10 + (c & 0xf);
+        c = ReadChar();
+    }
+    return ret;
+}
 
 typedef struct{
     int level;
@@ -31,12 +51,15 @@ int calc(int start, int end){
 
 int main(void){
     int M, d, algo;
-    scanf("%d %d %d", &N, &K, &D);
+    // scanf("%d %d %d", &N, &K, &D);
+    N = ReadInt(), K = ReadInt(), D = ReadInt();
     for(int i = 0; i < N; i++){
-        scanf("%d %d", &M, &d);
+        // scanf("%d %d", &M, &d);
+        M = ReadInt(), d = ReadInt();
         stu[i].level = d;
         for(int k = 0; k < M; k++){
-            scanf("%d", &algo);
+            // scanf("%d", &algo);
+            algo = ReadInt();
             stu[i].knows[k] = algo; 
         }
         stu[i].kidx = M;
@@ -44,7 +67,7 @@ int main(void){
     qsort(stu, N, sizeof(Student), compare);
     int ans = 0;
     int left = 0, right = 0;
-    while(left <= right && right < N){
+    while(left < N && right < N){
         if(stu[right].level - stu[left].level <= D){
             for(int i = 0; i < stu[right].kidx; i++){
                 check[stu[right].knows[i]]++;
