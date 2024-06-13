@@ -33,31 +33,24 @@ typedef struct{
 
 SQuery sQuery[100001];
 UQuery uQuery[100001];
-long long tree[300001];
+long long tree[200001];
 long long result[100001];
-int arr[100001];
+// int arr[100001];
 int N, M;
 
-long long init(int node, int start, int end){
-    if(start == end) return tree[node] = arr[start];
-    int mid = start + end >> 1;
-    return tree[node] = init(node << 1, start, mid) + init(node << 1|1, mid + 1, end);
+void init(){
+    for(int i = N - 1; i > 0; i--) tree[i] = tree[i << 1] + tree[i << 1|1];
 }
-void update(int node, int start, int end, int index, int dif){
-    if(index < start || end < index) return;
-    tree[node] += dif;
-    if(start == end) return;
-    int mid = start + end >> 1;
-    update(node << 1, start, mid, index, dif);
-    update(node << 1|1, mid + 1, end, index, dif);
+void update(int i, int val){
+    for(tree[i += N] = val; i > 1; i >>= 1) tree[i >> 1] = tree[i] + tree[i ^ 1];
 }
-long long query(int node, int start, int end, int left, int right){
-    if(end < left || right < start) return 0;
-    if(left <= start && end <= right) return tree[node];
-    int mid = start + end >> 1;
-    long long lsum = query(node << 1, start, mid, left, right);
-    long long rsum = query(node << 1|1, mid + 1, end, left, right);
-    return lsum + rsum;
+long long query(int l, int r){
+    long long res = 0;
+    for(l += N, r += N; l < r; l >>= 1, r >>= 1){
+        if(l & 1) res += tree[l++];
+        if(r & 1) res += tree[--r];
+    }
+    return res;
 }
 
 int compare(const void *a, const void *b){
@@ -70,8 +63,8 @@ int compare(const void *a, const void *b){
 int main(void){
     int q, i, v, j, k;
     N = ReadInt();
-    for(int i = 1; i <= N; i++) arr[i] = ReadInt();
-    init(1, 1, N);
+    for(int i = N; i < 2 * N; i++) tree[i] = ReadInt();
+    init();
 
     M = ReadInt();
     int sidx = 0, uidx = 0;
@@ -92,12 +85,12 @@ int main(void){
         }
     }
     qsort(sQuery, sidx, sizeof(SQuery), compare);
-    
+
     int curSIdx = 0;
     int curUIdx = 0;
     for(int i = 0; i < sidx; i++){
         if(sQuery[i].k != 0) break;
-        result[sQuery[i].origin] = query(1, 1, N, sQuery[i].left, sQuery[i].right);
+        result[sQuery[i].origin] = query(sQuery[i].left - 1, sQuery[i].right);
         curSIdx++;
     }
 
@@ -105,12 +98,11 @@ int main(void){
         while(curUIdx + 1 <= sQuery[i].k){
             int idx = uQuery[curUIdx].i;
             int val = uQuery[curUIdx].v;
-            int dif = val - arr[idx];
-            arr[idx] = val;
-            update(1, 1, N, idx, dif);
+            // arr[idx] = val;
+            update(idx - 1, val);
             curUIdx++;
         }
-        result[sQuery[i].origin] = query(1, 1, N, sQuery[i].left, sQuery[i].right);
+        result[sQuery[i].origin] = query(sQuery[i].left - 1, sQuery[i].right);
     }
     
     for(int i = 0; i < sidx; i++) printf("%lld\n", result[i]);
