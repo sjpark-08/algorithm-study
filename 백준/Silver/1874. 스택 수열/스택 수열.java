@@ -27,13 +27,11 @@ public class Main {
             int num = Integer.parseInt(br.readLine());
             while(num >= k){
                 push(k++);
-                sb.append('+');
-                sb.append('\n');
+                sb.append("+" + '\n');
             }
             if(top != -1 && stack[top] == num){
                 pop();
-                sb.append('-');
-                sb.append('\n');
+                sb.append("-" + '\n');
             }
         }    
         if(top != -1) {
