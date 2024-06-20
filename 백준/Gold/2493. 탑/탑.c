@@ -13,8 +13,8 @@ char ReadChar(){
 int ReadInt(){
     char c;
     int ret = 0;
-    while(c < '0') c = ReadChar();
-    while(c >= '0'){
+    while(c < '0' || c > '9') c = ReadChar();
+    while(c >= '0' && c <= '9'){
         ret = ret * 10 + (c & 0xf);
         c = ReadChar();
     }
@@ -52,7 +52,6 @@ void WriteInt(int n){
 
 int stack[500002];
 int tower[500002];
-int result[500002];
 int top = -1;
 
 void push(int data){
@@ -66,25 +65,13 @@ int main(void){
     int N, val;
     tower[0] = 0x7f7f7f7f;
     push(0);
-    // N = ReadInt();
-    scanf("%d", &N);
-    for(int i = 1; i <= N; i++) scanf("%d", &tower[i]); //tower[i] = ReadInt();
+    N = ReadInt();
+    for(int i = 1; i <= N; i++) tower[i] = ReadInt();
     for(int i = 1; i <= N; i++){
-        while(tower[stack[top]] < tower[i]){
-            // int out = pop();
-            // result[out] = stack[top];
-            pop();
-        }
+        while(tower[stack[top]] < tower[i]) pop();
+        // WriteInt(stack[top]);
         printf("%d ", stack[top]);
         push(i);
     }
-    // while(top > -1){
-    //     int out = pop();
-    //     result[out] = stack[top];
-    // }
-
-    // for(int i = 1; i <= N; i++) printf("%d ", result[i]);
-
     // fwrite(writebuf, 1, wp, stdout);
-    // printf("\n");
 }
