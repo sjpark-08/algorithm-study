@@ -54,24 +54,17 @@ int stack[500002];
 int tower[500002];
 int top = -1;
 
-void push(int data){
-    stack[++top] = data;
-}
-int pop(){
-    return stack[top--];
-}
-
 int main(void){
     int N, val;
     tower[0] = 0x7f7f7f7f;
-    push(0);
+    stack[top] = 0;
     N = ReadInt();
     for(int i = 1; i <= N; i++) tower[i] = ReadInt();
     for(int i = 1; i <= N; i++){
-        while(tower[stack[top]] < tower[i]) pop();
-        // WriteInt(stack[top]);
-        printf("%d ", stack[top]);
-        push(i);
+        while(tower[stack[top]] < tower[i]) top--;
+        // printf("%d ", stack[top]);
+        WriteInt(stack[top]);
+        stack[++top] = i;
     }
-    // fwrite(writebuf, 1, wp, stdout);
+    fwrite(writebuf, 1, wp, stdout);
 }
