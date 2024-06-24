@@ -22,9 +22,11 @@ int ReadInt(){
     return ret;
 }
 
+
 int stack[100001];
 char result[400002];
 int top = -1;
+int idx;
 
 void push(int data){
     stack[++top] = data;
@@ -32,25 +34,25 @@ void push(int data){
 int pop(){
     return stack[top--];
 }
+void Write(char c){
+    result[idx++] = c;
+    result[idx++] = '\n';
+}
 
 int main(void){
     int N, num;
     int k = 1;
-    int idx = 0;
 
     N = ReadInt();
     for(int i = 1; i <= N; i++){
         num = ReadInt();
         while(num >= k){
             push(k++);
-            result[idx++] = '+';
-            result[idx++] = '\n';
+            Write('+');
         }
         if(top != -1 && stack[top] == num){
             pop();
-            result[idx++] = '-';
-            result[idx++] = '\n';
-            continue;
+            Write('-');
         }
     }
     if(top != -1) printf("NO\n");
