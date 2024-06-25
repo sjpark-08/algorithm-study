@@ -1,58 +1,35 @@
 #include <stdio.h>
-#include <stdlib.h>
-#define MAX_SIZE 26000000
+#include <stdbool.h>
+#define SIZE 5001
+int tree[SIZE << 2];
 
-typedef int element;
-typedef struct{
-    int front;
-    int rear;
-    element data[MAX_SIZE];
-}QueueType;
-
-void init_queue(QueueType *q){
-    q->front = -1;
-    q->rear = -1;
+int init(int node, int start, int end){
+    if(start == end) return tree[node] = 1;
+    int mid = start + end >> 1;
+    return tree[node] = init(node << 1, start, mid) + init(node << 1|1, mid + 1, end);
 }
-int isFull(QueueType *q){
-    if(q->rear == MAX_SIZE)
-        return 1;
-    return 0;    
-}
-int isEmpty(QueueType *q){
-    if(q->front == q->rear)
-        return 1;
-    return 0;
-}
-void enqueue(QueueType *q, int item){
-    if(!isFull(q)){
-        q->data[++(q->rear)] = item;
-    }
-}
-int dequeue(QueueType *q){
-    if(!isEmpty(q)){
-        return q->data[++(q->front)];
-    }
+int update(int node, int start, int end, int index){
+    tree[node]--;
+    if(start == end) return start; // return node number
+    int mid = start + end >> 1;
+    if(index <= tree[node << 1]) return update(node << 1, start, mid, index); // to left child
+    else return update(node << 1|1, mid + 1, end, index - tree[node << 1]); // to right child
 }
 
 int main(void){
-    int n, k, i;
-    QueueType *q = (QueueType*)malloc(sizeof(QueueType));
-    init_queue(q);
-    int *arr = (int*)malloc(sizeof(int) * n);
-    scanf("%d %d", &n, &k);
-    for(i = 1; i <= n; i++)
-        enqueue(q, i);
-    int cnt = 0;
-    while(cnt < n){
-        for(i = 0; i < k - 1; i++){
-            enqueue(q, dequeue(q));
-        }
-        arr[cnt++] = dequeue(q);
-    }
-
+    int N, K, res;
+    scanf("%d %d", &N, &K);
+    init(1, 1, N);
+    int idx = K;
     printf("<");
-    for(i = 0; i < n - 1; i++)  
-        printf("%d, ", arr[i]);
-    printf("%d>\n", arr[i]);
+    while(true){
+        res = update(1, 1, N, idx);
+        if(tree[1]) printf("%d, ", res);
+        else {
+            printf("%d>\n", res);
+            break;
+        }
+        idx = (idx + K - 1) % tree[1];
+        if(!idx) idx = tree[1];
+    }
 }
-
