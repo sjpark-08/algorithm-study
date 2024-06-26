@@ -8,14 +8,15 @@ import java.util.StringTokenizer;
 
 
 public class Main {
-    private int[] stack = new int[100001];
-    private int top = -1;
+    private int[] queue = new int[2000001];
+    private int front = -1;
+    private int rear = -1;
 
     public void push(int data){
-        stack[++top] = data;
+        queue[++rear] = data;
     }
     public int pop(){
-        return stack[top--];
+        return queue[++front];
     }
 
     public void solution() throws Exception {
@@ -29,17 +30,17 @@ public class Main {
             String op = st.nextToken();
             if("push".equals(op)){
                 int num = Integer.parseInt(st.nextToken());
-                deque.addLast(num);
+                push(num);
             }else if("pop".equals(op)){
-                bw.write(String.valueOf(deque.isEmpty() ? -1 : deque.pop()) + '\n');
+                bw.write(String.valueOf(front == rear ? -1 : pop()) + '\n');
             }else if("size".equals(op)){
-                bw.write(String.valueOf(deque.size()) + '\n');
+                bw.write(String.valueOf(rear - front) + '\n');
             }else if("empty".equals(op)){
-                bw.write(deque.isEmpty() ? "1\n" : "0\n");
+                bw.write(front == rear ? "1\n" : "0\n");
             }else if("front".equals(op)){
-                bw.write(String.valueOf(deque.isEmpty() ? -1 : deque.getFirst()) + '\n');
+                bw.write(String.valueOf(front == rear ? -1 : queue[front + 1]) + '\n');
             }else if("back".equals(op)){
-                bw.write(String.valueOf(deque.isEmpty() ? -1 : deque.getLast()) + '\n');
+                bw.write(String.valueOf(front == rear ? -1 : queue[rear]) + '\n');
             }
         }
 
