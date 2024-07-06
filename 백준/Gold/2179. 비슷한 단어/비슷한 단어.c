@@ -4,6 +4,26 @@
 #include <stdbool.h>
 #define Min(x, y) ((x) < (y) ? (x) : (y))
 #define Max(x, y) ((x) > (y) ? (x) : (y))
+#define BUFSIZE 1 << 20
+char readbuf[BUFSIZE];
+int rp = BUFSIZE;
+char ReadChar(){
+    if(rp == BUFSIZE){
+        fread(readbuf, 1, BUFSIZE, stdin);
+        rp = 0;
+    }
+    return readbuf[rp++];
+}
+int ReadInt(){
+    char c;
+    int ret = 0;
+    while(c < '0' || c > '9') c = ReadChar();
+    while(c >= '0' && c <= '9'){
+        ret = ret * 10 + (c & 0xf);
+        c = ReadChar();
+    }
+    return ret;
+}
 
 typedef struct{
     char str[101];
@@ -15,15 +35,7 @@ int match[20001];
 int compare(const void *a, const void *b){
     String A = *(String*)a;
     String B = *(String*)b;
-
     if(strcmp(A.str, B.str) > 0) return 1;
-    return -1;
-}
-
-int compareInt(const void *a, const void *b){
-    int A = *(int*)a;
-    int B = *(int*)b;
-    if(A > B) return 1;
     return -1;
 }
 
@@ -33,18 +45,26 @@ int check(char *str1, char *str2){
         if(str1[k] != str2[k]) break;
         cnt++;
     }
-    return cnt++;
+    return cnt;
 }
 
 int main(void){
     int N, A, B;
     int max = -1;
     char backup[20001][101];
-    scanf("%d", &N);
+    N = ReadInt();
     for(int i = 0; i < N; i++) {
-        scanf("%s", arr[i].str);
-        arr[i].idx = i;
-        strcpy(backup[i], arr[i].str);
+        char c = ReadChar();
+        int k = 0;
+        while(c != '\n'){
+            arr[i].str[k] = c;
+            backup[i][k] = c;
+            k++;
+            arr[i].idx = i;
+            c = ReadChar();
+        }
+        arr[i].str[k] = '\0';
+        backup[i][k] = '\0';
     }
     qsort(arr, N, sizeof(String), compare);
 
@@ -70,5 +90,4 @@ int main(void){
             break;
         }
     }
-    // for(int i = 0; i < N; i++) printf("%d ", match[i]); printf("\n");
 }
