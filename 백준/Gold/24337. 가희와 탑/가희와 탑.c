@@ -53,5 +53,6 @@ int main(void){
         result[N - b + 1] = 1;
         result[1] = b;
     }
-    for(int i = 1; i <= N; i++) printf("%d ", result[i]);
+    for(int i = 1; i <= N; i++) WriteInt(result[i]);
+    fwrite(writebuf, 1, wp, stdout);
 }
