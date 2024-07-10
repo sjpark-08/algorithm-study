@@ -8,8 +8,6 @@ import java.util.Deque;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-import javax.swing.plaf.TreeUI;
-
 public class Main {
     StringBuilder sb = new StringBuilder();
     PriorityQueue<Integer>[] pqList;
