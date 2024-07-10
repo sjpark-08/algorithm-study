@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define BUFSIZE 1 << 17
-char readbuf[BUFSIZE];
-int rp = BUFSIZE;
+char readbuf[BUFSIZE], writebuf[BUFSIZE];
+int rp = BUFSIZE, wp = 0;
 char ReadChar(){
     if(rp == BUFSIZE){
         fread(readbuf, 1, BUFSIZE, stdin);
@@ -19,6 +19,27 @@ int ReadInt(){
         c = ReadChar();
     }
     return ret;
+}
+void WriteInt(int n){
+    int tmp = n;
+    int cnt = 0;
+    while(tmp > 0){
+        tmp /= 10;
+        cnt++;
+    }
+    if(n == 0) cnt = 1;
+    if(wp + cnt + 1 >= BUFSIZE){
+        fwrite(writebuf, 1, wp, stdout);
+        wp = 0;
+    }
+    writebuf[wp + cnt] = '\n';
+    int len = cnt;
+    while(cnt){
+        cnt--;
+        writebuf[wp + cnt] = n % 10 + 48;
+        n /= 10;
+    }
+    wp += len + 1;
 }
 
 typedef struct{
@@ -75,5 +96,6 @@ int main(void){
     }
 
     dfs(R);
-    for(int i = 1; i <= N; i++) printf("%d\n", visit[i]);
+    for(int i = 1; i <= N; i++) WriteInt(visit[i]);
+    fwrite(writebuf, 1, wp, stdout);
 }
