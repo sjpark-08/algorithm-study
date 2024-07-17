@@ -12,9 +12,9 @@ char ReadChar(){
     }
     return readubf[rp++];
 }
-lnt ReadInt(){
+int ReadInt(){
     char c;
-    lnt ret = 0;
+    int ret = 0;
     while(c < '0' || c > '9') c = ReadChar();
     while(c >= '0' && c <= '9'){
         ret = ret * 10 + (c & 0xf);
@@ -105,7 +105,7 @@ void dijkstra(int src){
 }
 
 int main(void){
-    lnt a, b;
+    int a, b;
     N = ReadInt(), M = ReadInt();
     for(int i = 0; i <= N; i++){
         adj[i] = (Vecter*)malloc(sizeof(Vecter));
@@ -115,8 +115,8 @@ int main(void){
     }
     for(int i = 0; i < M; i++){
         a = ReadInt(), b = ReadInt();
-        pushback(a, b, (lnt)i);
-        pushback(b, a, (lnt)i);
+        pushback(a, b, i);
+        pushback(b, a, i);
     } 
     dijkstra(1);
     printf("%lld\n", d[N]);
