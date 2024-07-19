@@ -28,15 +28,11 @@ int main(void){
     N = ReadInt();
     for(int i = 0; i < N; i++) arr[i] = ReadInt();
     
-    int left = 0, ans = 1;
+    int leftInc = 0, leftDec = 0, ans = 1;
     for(int right = 1; right < N; right++){
-        if(arr[right - 1] > arr[right]) left = right;
-        ans = Max(ans, right - left + 1);
-    }
-    left = 0;
-    for(int right = 1; right < N; right++){
-        if(arr[right - 1] < arr[right]) left = right;
-        ans = Max(ans, right - left + 1);
+        if(arr[right - 1] > arr[right]) leftInc = right;
+        if(arr[right - 1] < arr[right]) leftDec = right;
+        ans = Max(ans, Max(right - leftInc + 1, right - leftDec + 1));
     }
     printf("%d\n", ans);
 }
