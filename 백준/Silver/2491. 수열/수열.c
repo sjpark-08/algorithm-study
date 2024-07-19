@@ -19,20 +19,19 @@ int ReadInt(){
     }
     return ret;
 }
-
 #define Max(x, y) ((x) > (y) ? (x) : (y))
 
 int main(void){
-    int arr[100001];
     int N;
     N = ReadInt();
-    for(int i = 0; i < N; i++) arr[i] = ReadInt();
-    
+    int prev = ReadInt();
     int leftInc = 0, leftDec = 0, ans = 1;
     for(int right = 1; right < N; right++){
-        if(arr[right - 1] > arr[right]) leftInc = right;
-        if(arr[right - 1] < arr[right]) leftDec = right;
+        int cur = ReadInt();
+        if(prev > cur) leftInc = right;
+        if(prev < cur) leftDec = right;
         ans = Max(ans, Max(right - leftInc + 1, right - leftDec + 1));
+        prev = cur;
     }
     printf("%d\n", ans);
 }
