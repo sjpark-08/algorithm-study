@@ -3,25 +3,21 @@
 #include <vector>
 #include <queue>
 #include <cstring>
-#define BUFSIZE 1 << 17
-char readbuf[BUFSIZE];
-int rp = BUFSIZE;
-char ReadChar(){
-    if(rp == BUFSIZE){
-        fread(readbuf, 1, BUFSIZE, stdin);
-        rp = 0;
+char buf[1 << 17];
+
+char read() {
+    static int idx = 1 << 17, nidx = 1 << 17;
+    if (idx == nidx) {
+        nidx = fread(buf, 1, 1 << 17, stdin);
+        if (!nidx) return 0;
+        idx = 0;
     }
-    return readbuf[rp++];
+    return buf[idx++];
 }
-int ReadInt(){
-    char c;
-    int ret = 0;
-    while(c < '0' || c > '9') c = ReadChar();
-    while(c >= '0' && c <= '9'){
-        ret = ret * 10 + (c & 0xf);
-        c = ReadChar();
-    }
-    return ret;
+int readInt() {
+    int t, r = read() & 15;
+    while ((t = read()) & 16) r = r * 10 + (t & 15);
+    return r;
 }
 
 using namespace std;
@@ -37,7 +33,6 @@ struct Edge{
 };
 
 vector<Edge> edge[5002];
-// vector<pair<int, int>> edge[5001]; 
 
 int d[5002];
 bool visited[5002];
@@ -69,18 +64,16 @@ void dijkstra(int src){
 
 int main(void){
     int a, b, c, s, t;
-    // N = ReadInt(), M = ReadInt();
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin >> N >> M;
+    N = readInt(), M = readInt();
+    // cin >> N >> M;
     while(M--){
-        // a = ReadInt(), b = ReadInt(), c = ReadInt();
-        cin >> a >> b >> c;
+        a = readInt(), b = readInt(), c = readInt();
+        // cin >> a >> b >> c;
         edge[a].push_back(Edge(b, c));
         edge[b].push_back(Edge(a, c));
     }
-    // s = ReadInt(), t = ReadInt();
-    cin >> s >> t;
+    s = readInt(), t = readInt();
+    // cin >> s >> t;
     dijkstra(s);
     cout << d[t] << endl;
 }
