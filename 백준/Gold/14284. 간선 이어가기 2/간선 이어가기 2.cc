@@ -3,20 +3,20 @@
 #include <vector>
 #include <queue>
 #include <cstring>
-char buf[1 << 17];
-
+#define BUFSIZE 1 << 17
+char readbuf[BUFSIZE];
 char read() {
-    static int idx = 1 << 17, nidx = 1 << 17;
-    if (idx == nidx) {
-        nidx = fread(buf, 1, 1 << 17, stdin);
-        if (!nidx) return 0;
-        idx = 0;
+    static int rp = BUFSIZE, size = BUFSIZE;
+    if (rp == size) {
+        size = fread(readbuf, 1, BUFSIZE, stdin);
+        if (!size) return 0;
+        rp = 0;
     }
-    return buf[idx++];
+    return readbuf[rp++];
 }
 int readInt() {
-    int t, r = read() & 15;
-    while ((t = read()) & 16) r = r * 10 + (t & 15);
+    int t, r = read() & 0xf;
+    while ((t = read()) & 0x10) r = r * 10 + (t & 0xf);
     return r;
 }
 
