@@ -17,8 +17,8 @@ char read(){
 int readInt(){
     char c;
     int ret = 0;
-    while(c < '0') c = read();
-    while(c >= '0'){
+    while(c < '0' || c > '9') c = read();
+    while(c >= '0' && c <= '9'){
         ret = ret * 10 + (c & 0xf);
         c = read();
     }
@@ -34,25 +34,20 @@ bool compare(pair<int, int> a, pair<int, int> b){
 
 int main(void){
     int TC, N, M, t;
-    // TC = readInt();
-    cin >> TC;
+    TC = readInt();
     while(TC--){
-        // N = readInt(), M = readInt();
-        cin >> N >> M;
+        N = readInt(), M = readInt();
         for(int i = 0; i < N; i++){
-            // int s = readInt();
-            cin >> t;
+            t = readInt();
             p.push_back(make_pair(t, 2));
         }
         for(int i = 0; i < M; i++){
-            // int b = readInt();
-            cin >> t;
+            t = readInt();
             p.push_back(make_pair(t, 1));
         }
         sort(p.begin(), p.end(), compare);
         if(p[0].second & 1) cout << "B" << '\n';
         else cout << "S" << '\n';
-        // for(int i = 0; i < p.size(); i++) cout << p[i].first << ' ' << p[i].second << '\n';
         p.clear();
     }
 }
