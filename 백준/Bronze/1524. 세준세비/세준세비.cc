@@ -37,14 +37,8 @@ int main(void){
     TC = readInt();
     while(TC--){
         N = readInt(), M = readInt();
-        for(int i = 0; i < N; i++){
-            t = readInt();
-            p.push_back(make_pair(t, 2));
-        }
-        for(int i = 0; i < M; i++){
-            t = readInt();
-            p.push_back(make_pair(t, 1));
-        }
+        for(int i = 0; i < N; i++) p.push_back(make_pair(readInt(), 2));
+        for(int i = 0; i < M; i++) p.push_back(make_pair(readInt(), 1));
         sort(p.begin(), p.end(), compare);
         if(p[0].second & 1) cout << "B" << '\n';
         else cout << "S" << '\n';
