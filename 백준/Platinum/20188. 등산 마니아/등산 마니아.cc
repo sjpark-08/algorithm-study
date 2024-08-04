@@ -13,8 +13,13 @@ char read(){
     return readbuf[rp++];
 }
 int readInt(){
-    char c, ret = read() & 0xf;
-    while((c = read()) & 0x10) ret = ret * 10 + (c & 0xf);
+    char c;
+    int ret = 0;
+    while(c < '0' || c > '9') c = read();
+    while(c >= '0' && c <= '9'){
+        ret = ret * 10 + (c & 0xf);
+        c = read();
+    }
     return ret;
 }
 
