@@ -1,8 +1,8 @@
 #include <cstdio>
 using namespace std;
 #define BUFSIZE 1 << 20
-char readbuf[BUFSIZE];
-int rp = BUFSIZE;
+char readbuf[BUFSIZE], writebuf[BUFSIZE];
+int rp = BUFSIZE, wp = 0;
 char read(){
     if(rp == BUFSIZE){
         fread(readbuf, 1, BUFSIZE, stdin);
@@ -20,8 +20,32 @@ int readInt(){
     }
     return ret;
 }
+void writeInt(int n){
+    if(n == 0){
+        writebuf[wp++] = '0';
+        writebuf[wp++] = '\n';
+        return;
+    }
+    int tmp = n;
+    int cnt = 0;
+    while(tmp){
+        tmp /= 10;
+        cnt++;
+    }
+    if(wp + cnt >= BUFSIZE){
+        fwrite(writebuf, 1, wp, stdout);
+        wp = 0;
+    }
+    writebuf[wp + cnt] = '\n';
+    int len = cnt;
+    while(n){
+        cnt--;
+        writebuf[wp + cnt] = n % 10 + 48;
+        n /= 10;
+    }
+    wp += len + 1;
+}
 
-typedef long long lnt;
 int tree[2000000], lazy[2000000], arr[500001];
 int N, M;
 
@@ -57,7 +81,6 @@ void update_range(int node, int start, int end, int left, int right, int dif){
     int mid = start + end >> 1;
     update_range(node << 1, start, mid, left, right, dif);
     update_range(node << 1|1, mid + 1, end, left, right, dif);
-    // tree[node] = tree[node << 1] + tree[node << 1|1];
 }
 int query(int node, int start, int end, int left, int right){
     update_lazy(node, start, end);
@@ -82,7 +105,8 @@ int main(void){
             update_range(1, 0, N - 1, a, b, c);
         }else{
             a = readInt();
-            printf("%d\n", query(1, 0, N - 1, a, a));
+            writeInt(query(1, 0, N - 1, a, a));
         }
     }
+    fwrite(writebuf, 1, wp, stdout);
 }
