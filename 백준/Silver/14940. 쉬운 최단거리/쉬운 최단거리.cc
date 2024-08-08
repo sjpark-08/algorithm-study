@@ -1,11 +1,10 @@
-#include <cstdio>
 #include <iostream>
 #include <queue>
 #include <cstring>
 using namespace std;
 #define BUFSIZE 1 << 19
-char readbuf[BUFSIZE], writebuf[BUFSIZE];
-int rp = BUFSIZE, wp = 0;
+char readbuf[BUFSIZE];
+int rp = BUFSIZE;
 char read(){
     if(rp == BUFSIZE){
         fread(readbuf, 1, BUFSIZE, stdin);
