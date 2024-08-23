@@ -16,7 +16,7 @@ int bfs(int srcX, int srcY){
         int x = q.front().first.first;
         int y = q.front().first.second;
         int d = q.front().second;
-        if(map[x][y]) return d;
+        // if(map[x][y]) return d;
         q.pop();
 
         for(int i = 0; i < 8; i++){
@@ -24,6 +24,7 @@ int bfs(int srcX, int srcY){
             int ny = y + dy[i];
             if(nx < 0 || ny < 0 || nx > N - 1 || ny > M - 1) continue;
             if(visited[nx][ny]) continue;
+            if(map[nx][ny]) return d + 1;
             visited[nx][ny] = true;
             q.push({{nx, ny}, d + 1});
         }
