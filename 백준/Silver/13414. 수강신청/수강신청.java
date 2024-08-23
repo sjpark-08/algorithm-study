@@ -25,12 +25,24 @@ public class Main {
             String student = br.readLine();
             map.put(student, i);
         }
-        List<Pair> toSort = new ArrayList<Pair>();
-        map.forEach((key, value) -> toSort.add(new Pair(key, value)));
-        Collections.sort(toSort, (p1, p2) -> p1.index - p2.index);
+        // List<Pair> toSort = new ArrayList<Pair>();
+        // map.forEach((key, value) -> toSort.add(new Pair(key, value)));
+        // Collections.sort(toSort, (p1, p2) -> p1.index - p2.index);
 
-        int T = Math.min(K, toSort.size());
-        for(int i = 0; i < T; i++) bw.write(toSort.get(i).student + '\n');
+        // int T = Math.min(K, st.size());
+        // for(int i = 0; i < T; i++) bw.write(toSort.get(i).student + '\n');
+
+        String[] students = new String[L];
+        map.forEach((key, value) -> students[value] = key);
+        int T = Math.min(K, map.size());
+        int cnt = 0;
+        for(int i = 0; i < L; i++){
+            if(students[i] == null) continue;
+            bw.write(students[i] + '\n');
+            cnt++;
+            if(cnt == T) break;
+        }
+        
         bw.flush();
     }
     public static void main(String[] args) throws Exception {
