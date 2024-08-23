@@ -31,7 +31,6 @@ int main(void){
     N = readInt();
     for(int i = 0; i < N; i++) arr[i] = readInt();
     int left = 0, right = N - 1, ans = 0x7f7f7f7f;
-    int tmp = arr[left] + arr[right];
     int ansL = left, ansR = right;
     while(left < right){
         int tmp = arr[left] + arr[right];
