@@ -26,13 +26,11 @@ int map[1001][1001];
 int dp[1001][1001];
 
 int main(void){
-    ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
     int N, M;
-    cin >> N >> M;
+    N = readInt(), M = readInt();
     for(int i = 1; i <= N; i++){
         for(int j = 1; j <= M; j++){
-            cin >> map[i][j];
+            map[i][j] = readInt();
         }
     }
     for(int i = 1; i <= N; i++){
