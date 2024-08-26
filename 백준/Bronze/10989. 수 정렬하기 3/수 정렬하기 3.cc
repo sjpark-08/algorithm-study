@@ -51,7 +51,7 @@ int main(void){
     }
     for(int i = 1; i <= 10000; i++){
         if(!cnt[i]) continue;
-        for(int k = 0; k < cnt[i]; k++) printf("%d\n", i);
+        for(int k = 0; k < cnt[i]; k++) writeInt(i);
     }
     fwrite(writebuf, 1, wp, stdout);
 }
