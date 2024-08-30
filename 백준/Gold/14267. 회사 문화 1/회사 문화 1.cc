@@ -2,9 +2,9 @@
 #include <vector>
 #include <iostream>
 using namespace std;
-#define BUFSIZE 1 << 17
-char readbuf[BUFSIZE];
-int rp = BUFSIZE;
+#define BUFSIZE 1 << 18
+char readbuf[BUFSIZE], writebuf[BUFSIZE];
+int rp = BUFSIZE, wp = 0;
 char read(){
     if(rp == BUFSIZE){
         fread(readbuf, 1, BUFSIZE, stdin);
@@ -21,6 +21,27 @@ int readInt(){
         c = read();
     }
     return ret;
+}
+void writeInt(int n){
+    int tmp = n, cnt = 0;
+    while(tmp > 0){
+        tmp /= 10;
+        cnt++;
+    }
+    if(n == 0) cnt = 1;
+    if(wp + cnt + 1 >= BUFSIZE){
+        fwrite(writebuf, 1, wp, stdout);
+        wp = 0;
+    }
+    writebuf[wp + cnt] = ' ';
+    int len = cnt;
+    if(n == 0) writebuf[wp + --cnt] = '0';
+    while(n > 0){
+        --cnt;
+        writebuf[wp + cnt] = n % 10 + 48;
+        n /= 10;
+    }
+    wp += len + 1;
 }
 
 vector<int> edge[100001];
@@ -47,5 +68,6 @@ int main(void){
         dp[a] += b;
     }
     update(1);
-    for(int i = 1; i <= N; i++) printf("%d ", dp[i]);
+    for(int i = 1; i <= N; i++) writeInt(dp[i]);
+    fwrite(writebuf, 1, wp, stdout);
 }
