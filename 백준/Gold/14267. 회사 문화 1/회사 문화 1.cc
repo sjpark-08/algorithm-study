@@ -36,19 +36,14 @@ void update(int now){
 }
 
 int main(void){
-    // N = readInt(), M = readInt();
-    cin >> N >> M;
-    // readInt();
-    cin >> a;
+    N = readInt(), M = readInt();
+    readInt();
     for(int i = 2; i <= N; i++){
-        // int up = readInt();
-        int up;
-        cin >> up;
+        int up = readInt();
         edge[up].push_back(i);
     }
     for(int i = 0; i < M; i++){
-        // a = readInt(), b = readInt();
-        cin >> a >> b;
+        a = readInt(), b = readInt();
         dp[a] += b;
     }
     update(1);
