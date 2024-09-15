@@ -1,5 +1,5 @@
 #include <iostream>
-#include <unordered_map>
+#include <unordered_set>
 #include <string>
 using namespace std;
 int main(void){
@@ -14,10 +14,10 @@ int main(void){
     else if(game == 'F') G = 2;
     else G = 3;
 
-    unordered_map<string, int> pMap;
+    unordered_set<string> pSet;
     for(int i = 0; i < N; i++){
         cin >> player;
-        pMap[player]++;
+        pSet.insert(player);
     }
-    cout << pMap.size() / G;
+    cout << pSet.size() / G;
 }
