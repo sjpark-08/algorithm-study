@@ -1,58 +1,75 @@
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <string>
-#include <memory.h>
+#include <cstdio>
 using namespace std;
+#define BUFSIZE 1 << 16
+char readbuf[BUFSIZE];
+int rp = BUFSIZE;
+char read(){
+    if(rp == BUFSIZE){
+        fread(readbuf, 1, BUFSIZE, stdin);
+        rp = 0;
+    }
+    return readbuf[rp++];
+}
+char readInt(){
+    char c;
+    int ret = 0;
+    while(c < '0' || c > '9') c = read();
+    while(c >= '0' && c <= '9'){
+        ret = ret * 10 + (c & 0xf);
+        c = read();
+    }
+    return ret;
+}
+
 
 int N, M, srcX, srcY, destX, destY;
-vector<pair<int, int>> edge[90001];
+// char map[301][301];
 string map[301];
+bool visited[301][301];
 int dx[4] = {0, 0, -1, 1};
 int dy[4] = {-1, 1, 0, 0};
-int d[90001];
 
-void dijkstra(){
-    memset(d, 0x7f, sizeof(d));
-    d[srcX * M + srcY] = 0;
-    priority_queue<pair<int, int>> q;
-    q.push({0, srcX * M + srcY});
-
+int bfs(){
+    deque<pair<pair<int, int>, int>> q;
+    q.push_front({{srcX, srcY}, 0});
+    visited[srcX][srcY] = true;
     while(!q.empty()){
-        int cost = -q.top().first;
-        int now = q.top().second;
-        q.pop();
-        for(int i = 0; i < edge[now].size(); i++){
-            int next = edge[now][i].first;
-            int nCost = edge[now][i].second;
-            if(d[next] > cost + nCost){
-                d[next] = cost + nCost;
-                q.push({-d[next], next});
-            }
+        int x = q.front().first.first;
+        int y = q.front().first.second;
+        int t = q.front().second;
+        q.pop_front();
+        if(x == destX && y == destY) return t;
+        for(int i = 0; i < 4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if(nx < 0 || ny < 0 || nx > N - 1 || ny > M - 1 || visited[nx][ny]) continue;
+            if(map[nx][ny] == '0') q.push_front({{nx, ny}, t});
+            else q.push_back({{nx, ny}, t + 1});
+            visited[nx][ny] = true;
+            // if(map[nx][ny] == '#') cout << nx << ' ' << ny << '\n';
         }
     }
+    return 0;
 }
 
 int main(void){
+    // N = readInt(), M = readInt();
+    // srcX = readInt(), srcY = readInt();
+    // destX = readInt(), destY = readInt();
     ios_base::sync_with_stdio(false);
-    cin.tie(0);
+    cin.tie(0); cout.tie(0);
     cin >> N >> M;
     cin >> srcX >> srcY >> destX >> destY;
-    for(int i = 0; i < N; i++) cin >> map[i];
+    srcX--, srcY--, destX--, destY--;
     for(int i = 0; i < N; i++){
-        for(int j = 0; j < M; j++){
-            if(map[i][j] == '*') srcX = i, srcY = j;
-            else if(map[i][j] == '#') destX = i, destY = j;
-            for(int k = 0; k < 4; k++){
-                int nx = i + dx[k];
-                int ny = j + dy[k];
-                if(nx < 0 || ny < 0 || nx > N - 1 || ny > M - 1) continue;
-                if(map[nx][ny] == '1' || map[nx][ny] == '#' || map[nx][ny] == '*') 
-                    edge[i * M + j].push_back({nx * M + ny, 1});
-                else edge[i * M + j].push_back({nx * M + ny, 0});
-            }
-        }
+        // for(int j = 0; j < M; j++){
+            // map[i][j] = read();
+            cin >> map[i];
+        // }
+        // read(); // LF
     }
-    dijkstra();
-    cout << d[destX * M + destY];
+    cout << bfs();
+    // for(int i = 0; i < N; i++) cout << map[i] << '\n';
 }
