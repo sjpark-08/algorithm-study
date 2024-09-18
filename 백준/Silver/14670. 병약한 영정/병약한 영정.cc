@@ -1,11 +1,13 @@
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 using namespace std;
 
 int main(void){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr); cout.tie(nullptr);
     int N, Me, Mn, R, L, S;
-    map<int, int> pMap;
+    unordered_map<int, int> pMap;
     cin >> N;
     for(int i = 0; i < N; i++){
         cin >> Me >> Mn;
