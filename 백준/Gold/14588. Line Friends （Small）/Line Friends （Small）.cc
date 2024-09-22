@@ -45,7 +45,7 @@ int main(void){
         lines.push_back(Line(i, L, R));
     }
     sort(lines.begin(), lines.end());
-    // for(auto line : lines) cout << line.idx << ' ' << line.l << ' ' << line.r << '\n';
+    
     for(int i = 0; i < lines.size(); i++){
         for(int j = i + 1; j < lines.size(); j++){
             if(lines[i].r < lines[j].l) break;
