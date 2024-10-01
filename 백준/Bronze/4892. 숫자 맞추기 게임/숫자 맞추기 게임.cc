@@ -3,6 +3,8 @@
 using namespace std;
 
 int main(void){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr); cout.tie(nullptr);
     int n0, n1, n2, n3, n4, i = 0;
     while(++i){
         string oddOrEven;
