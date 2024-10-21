@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <set>
+#include <memory.h>
 using namespace std;
 
 int dx[8] = {0, -1, -1, -1, 0, 1, 1, 1};
 int dy[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
 int bucket[51][51];
-set<pair<int, int>> clouds;
+bool is_cloud[51][51];
 
 int main(void){
     ios_base::sync_with_stdio(false);
@@ -19,15 +19,17 @@ int main(void){
         }
     }
 
-    clouds.insert({N - 1, 0});
-    clouds.insert({N - 1, 1});
-    clouds.insert({N - 2, 0});
-    clouds.insert({N - 2, 1});
+    vector<pair<int, int>> clouds;
+    clouds.push_back({N - 1, 0});
+    clouds.push_back({N - 1, 1});
+    clouds.push_back({N - 2, 0});
+    clouds.push_back({N - 2, 1});
 
     while(M--){
         cin >> d >> s;
         d--;
-        set<pair<int, int>> clouds_copy;
+        memset(is_cloud, 0, sizeof(is_cloud));
+        vector<pair<int, int>> clouds_copy;
         for(auto cloud : clouds){
             int x = cloud.first;
             int y = cloud.second;
@@ -36,9 +38,9 @@ int main(void){
             if(nx < 0) nx += N;
             if(ny < 0) ny += N;
             bucket[nx][ny]++;
-            clouds_copy.insert({nx, ny});
+            clouds_copy.push_back({nx, ny});
+            is_cloud[nx][ny] = true;
         }
-        clouds.clear();
 
         for(auto cloud : clouds_copy){
             int x = cloud.first;
@@ -53,11 +55,11 @@ int main(void){
             bucket[x][y] += cnt;
         }
 
+        clouds.clear();
         for(int i = 0; i < N; i++){
             for(int j = 0; j < N; j++){
-                if(bucket[i][j] < 2) continue;
-                if(clouds_copy.find({i, j}) != clouds_copy.end()) continue;
-                clouds.insert({i, j});
+                if(bucket[i][j] < 2 || is_cloud[i][j]) continue;
+                clouds.push_back({i, j});
                 bucket[i][j] -= 2;
             }
         }
